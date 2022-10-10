@@ -1,37 +1,42 @@
 <template>
   <div class="container">
     <h1>Payment</h1>
-    <input type="text" v-model="item1.name" />
-    <input type="text" v-model="item1.price" />
-    <button v-on:click="clear">Clear!</button>
+    <input type="text" v-model="item1.name" placeholder="input name here" />
+    <input
+      type="text"
+      v-model="item1.price"
+      placeholder="input price here*under 50000"
+    />
+    <button id="clear" v-on:click="clear">Clear!</button>
     <div class="payment" ref="text">
-      <label> {{ item1.name }} </label>
-      <label for="">{{ item1.price }}</label>
+      <label> {{ itemName }} </label>
+      <label for="">{{ priceIsOver }}</label>
       <a v-bind:href="item1.url">amazon</a>
       <button v-on:click="buy(item1.name)">BUY IT</button>
     </div>
     <div class="payment">
       <label> {{ item2.name }} </label>
       <label>{{ item2.price }} yen</label>
+      <a v-bind:href="item1.url">amazon</a>
+      <button v-on:click="buy(item1.name)">BUY IT</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { toRefs, watch } from 'vue';
-import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class Payment extends Vue {
   @Prop() private badget!: number;
 
   item1 = {
-    name: "item",
-    price: "20000",
+    name: "",
+    price: "",
     url: "https://google.com",
   }
 
   item2 = {
-    name: "item",
+    name: "sample",
     price: "40000",
     url: "https://amazon.co.jp/"
   }
@@ -51,6 +56,14 @@ export default class Payment extends Vue {
       return this.item1.price + " yen";
     } else {
       return "too expensive !!";
+    }
+  }
+
+  get itemName() {
+    if (this.item1.name == "") {
+      return "sample";
+    } else {
+      return this.item1.name;
     }
   }
 
@@ -75,5 +88,12 @@ label {
   font-weight: bold;
   align-items: center;
   margin-bottom: 8px;
+}
+input {
+  margin-bottom: 8px;
+}
+#clear {
+  margin-bottom: 8px;
+  padding: 2px 8px;
 }
 </style>
