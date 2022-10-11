@@ -3,12 +3,16 @@
     <h1>Memo App</h1>
     <div class="form-container">
       <input type="text" v-model="desc" />
-      <button id="post" class="save-button" @click="post()">post</button>
+      <button id="post" class="save-button" @click="post()">POST</button>
     </div>
     <div class="memo-container">
-      <ul class="ul">
+      <p v-if="this.id == 0" class="no-memos">No memos has been posted</p>
+      <ul v-if="this.id != 0" class="ul">
         <li v-for="memo in memos" :key="memo.id" class="memo-list">
           <span>{{ memo.description }}</span>
+          <button @click="deletePost(memo.id)" class="delete-button">
+            DELETE
+          </button>
         </li>
       </ul>
     </div>
@@ -19,20 +23,30 @@
 import { Component, Vue } from 'vue-property-decorator';
 @Component
 export default class Memo extends Vue {
-  memos = [{ id: 0, description: "sample memo!" }];
+
+  id = 0;
   desc = ""; // insert from input string
+  memos = [{ id: 0, description: "" }];
 
   post() {
     if (this.desc == "") {
-      alert('input anyy')
+      alert('input anyy');
+    } else if (this.id == 0) {
+      this.memos[0].id = 1;
+      this.memos[0].description = this.desc;
+      this.id++;
+      this.desc = "";
     } else {
-      let inputtingDesc = { id: 0, description: "" };
-      inputtingDesc.id = Math.round(Math.random() * 10);
+      this.id++;
+      let inputtingDesc = { id: this.id, description: "" };
+      inputtingDesc.id = this.id
       inputtingDesc.description = this.desc;
       this.memos.push(inputtingDesc);
       this.desc = "";
     }
-
+  }
+  deletePost(id: number) {
+    this.memos = this.memos.filter(t => t.id !== id);
   }
 }
 </script>
@@ -50,9 +64,11 @@ export default class Memo extends Vue {
   align-items: center;
   background-color: aliceblue;
   padding: 24px 0;
-  width: 300px;
+  width: 400px;
+  height: 100px;
   margin-bottom: 12px;
   border-radius: 4px;
+  justify-content: center;
 }
 
 span {
@@ -67,7 +83,7 @@ span {
   margin-bottom: 20px;
   width: 400px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -80,5 +96,29 @@ span {
 }
 input {
   margin-bottom: 12px;
+}
+
+button.delete-button {
+  background-color: blanchedalmond;
+  border: none;
+  padding: 5px 8px;
+  color: #7e0e0e;
+  border-radius: 4px;
+}
+
+button.delete-button:hover {
+  background-color: rgb(255, 189, 91);
+}
+
+button.save-button {
+  background-color: #e2dce3;
+  border: none;
+  padding: 9px 27px;
+  color: #ef918a;
+  border-radius: 4px;
+}
+
+button.save-button:hover {
+  background-color: #cec7cf;
 }
 </style>
