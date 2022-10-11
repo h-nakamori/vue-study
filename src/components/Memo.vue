@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <h1>Memo App</h1>
-    <div class="form-container">
-      <input type="text" v-model="desc" />
-      <button id="post" class="save-button" @click="post()">POST</button>
-    </div>
+
+    <memo-post-form @post="doPost($event)" />
+
+    <!-- ここもコンポーネント化したい -->
     <div class="memo-container">
       <p v-if="this.id == 0" class="no-memos">No memos has been posted</p>
       <ul v-if="this.id != 0" class="ul">
@@ -21,26 +21,31 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-@Component
+import MemoPostForm from "@/components/MemoPostForm.vue";
+import MemoList from "@/components/MemoList.vue";
+@Component({
+  components: {
+    MemoPostForm,
+    MemoList,
+  }
+})
 export default class Memo extends Vue {
 
   id = 0;
   desc = ""; // insert from input string
   memos = [{ id: 0, description: "" }];
 
-  post() {
-    if (this.desc == "") {
-      alert('input anyy');
-    } else if (this.id == 0) {
+  async doPost(e: string) {
+    if (this.id == 0) {
       this.memos[0].id = 1;
-      this.memos[0].description = this.desc;
+      this.memos[0].description = e;
       this.id++;
       this.desc = "";
     } else {
       this.id++;
       let inputtingDesc = { id: this.id, description: "" };
-      inputtingDesc.id = this.id
-      inputtingDesc.description = this.desc;
+      inputtingDesc.id = this.id;
+      inputtingDesc.description = e;
       this.memos.push(inputtingDesc);
       this.desc = "";
     }
@@ -94,9 +99,6 @@ span {
   margin: 0, auto;
   padding-inline-start: 0%;
 }
-input {
-  margin-bottom: 12px;
-}
 
 button.delete-button {
   background-color: blanchedalmond;
@@ -108,17 +110,5 @@ button.delete-button {
 
 button.delete-button:hover {
   background-color: rgb(255, 189, 91);
-}
-
-button.save-button {
-  background-color: #e2dce3;
-  border: none;
-  padding: 9px 27px;
-  color: #ef918a;
-  border-radius: 4px;
-}
-
-button.save-button:hover {
-  background-color: #cec7cf;
 }
 </style>
