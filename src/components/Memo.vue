@@ -2,7 +2,7 @@
   <div class="container">
     <h1>Memo App</h1>
 
-    <memo-post-form @post="doPost($event)" />
+    <memo-post-form @post="doPost" />
 
     <!-- ここもコンポーネント化したい -->
     <div class="memo-container">
