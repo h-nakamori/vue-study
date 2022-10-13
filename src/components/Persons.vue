@@ -36,8 +36,9 @@ export default class Persons extends Vue {
     this.persons.push(e);
   }
   receiveDelete(id: number) {
-    confirm("are you sure to delete this?")
-    this.persons = this.persons.filter(p => p.id !== id)
+    if (confirm("Are you sure you want to delete this?")) {
+      this.persons = this.persons.filter(p => p.id !== id)
+    }
   }
 }
 </script>
