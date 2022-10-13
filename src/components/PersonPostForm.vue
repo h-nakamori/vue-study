@@ -1,16 +1,35 @@
 <template>
   <div class="form-container">
     <div class="input-container">
+      <span class="invalid-msg" v-if="!isValidName">
+        Please input 15 chars or less
+      </span>
       <div class="input-column">
         <span>name:</span>
-        <input v-model="inputtingName" type="text" class="input" />
+        <input
+          v-model="inputtingName"
+          type="text"
+          :class="{ notValid: !isValidName }"
+        />
       </div>
+      <span class="invalid-msg" v-if="!isValidAge">error: invalid value</span>
       <div class="input-column">
         <span>age:</span>
-        <input v-model="inputtingAge" type="number" class="input" />
+        <input
+          v-model="inputtingAge"
+          type="number"
+          class="input"
+          :class="{ notValid: !isValidAge }"
+        />
       </div>
     </div>
-    <button @click="defineEmits" class="register-button">POST</button>
+    <button
+      @click="defineEmits"
+      class="register-button"
+      :disabled="!isValidName || !isValidAge"
+    >
+      POST
+    </button>
   </div>
 </template>
 
@@ -30,8 +49,19 @@ export default class PersonPostForm extends Vue {
     const person = { id: Math.random(), name: this.inputtingName, age: this.inputtingAge }
     return person
   }
+  get isValidName() {
+    if (this.inputtingName.length > 15) {
+      return false
+    }
+    return true
+  }
+  get isValidAge() {
+    if (this.inputtingAge < 0 || this.inputtingAge > 99) {
+      return false
+    }
+    return true
+  }
 }
-
 </script>
 
 <style scoped>
@@ -54,7 +84,7 @@ span {
 .input-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 50px;
   margin-bottom: 20px;
 }
@@ -68,5 +98,14 @@ span {
 input {
   width: 120px;
   margin-bottom: 8px;
+}
+
+.notValid {
+  background-color: rgb(255, 146, 146);
+}
+
+.invalid-msg {
+  font-size: 12px;
+  color: rgb(255, 146, 146);
 }
 </style>
