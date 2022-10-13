@@ -10,6 +10,7 @@
           v-model="inputtingName"
           type="text"
           :class="{ notValid: !isValidName }"
+          placeholder="*Required"
         />
       </div>
       <span class="invalid-msg" v-if="!isValidAge">error: invalid value</span>
@@ -26,7 +27,7 @@
     <button
       @click="defineEmits"
       class="register-button"
-      :disabled="!isValidName || !isValidAge"
+      :disabled="!isValidName || !isValidAge || isEmpty"
     >
       POST
     </button>
@@ -60,6 +61,9 @@ export default class PersonPostForm extends Vue {
       return false
     }
     return true
+  }
+  get isEmpty() {
+    return this.inputtingName.length == 0;
   }
 }
 </script>
